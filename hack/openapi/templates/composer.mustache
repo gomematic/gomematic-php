@@ -1,8 +1,10 @@
 {
-    "name": "gomematic/gomematic",
+    "name": "{{gitUserId}}/{{packageName}}",
     "type": "library",
-    "version": "1.0.0-alpha1",
-    "description": "API definition for Gomematic",
+    {{#artifactVersion}}
+    "version": "{{artifactVersion}}",
+    {{/artifactVersion}}
+    "description": "{{{appDescription}}}",
     "keywords": [
         "openapitools",
         "openapi-generator",
@@ -14,7 +16,7 @@
         "homematic",
         "automation"
     ],
-    "homepage": "https://github.com/gomematic/gomematic-php",
+    "homepage": "https://github.com/{{gitUserId}}/{{gitRepoId}}",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -39,12 +41,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Gomematic\\" : "lib/"
+            "{{escapedInvokerPackage}}\\" : "{{srcBasePath}}/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Gomematic\\" : "test/"
+            "{{escapedInvokerPackage}}\\" : "{{testBasePath}}/"
         }
     }
 }
