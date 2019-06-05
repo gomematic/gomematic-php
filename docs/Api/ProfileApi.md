@@ -1,6 +1,6 @@
 # Gomematic\ProfileApi
 
-All URIs are relative to *http://http:/api/v1*
+All URIs are relative to *http://try.gomematic.tech/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

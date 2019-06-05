@@ -1,6 +1,6 @@
 # Gomematic\AuthApi
 
-All URIs are relative to *http://http:/api/v1*
+All URIs are relative to *http://try.gomematic.tech/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## loginUser
 
-> \Gomematic\Model\AuthToken loginUser($auth)
+> \Gomematic\Model\AuthToken loginUser($params)
 
 Authenticate an user by credentials
 
@@ -28,10 +28,10 @@ $apiInstance = new Gomematic\Api\AuthApi(
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client()
 );
-$auth = new \Gomematic\Model\InlineObject(); // \Gomematic\Model\InlineObject | 
+$params = new \Gomematic\Model\AuthLogin(); // \Gomematic\Model\AuthLogin | The credentials to authenticate
 
 try {
-    $result = $apiInstance->loginUser($auth);
+    $result = $apiInstance->loginUser($params);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling AuthApi->loginUser: ', $e->getMessage(), PHP_EOL;
@@ -44,7 +44,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **auth** | [**\Gomematic\Model\InlineObject**](../Model/InlineObject.md)|  |
+ **params** | [**\Gomematic\Model\AuthLogin**](../Model/AuthLogin.md)| The credentials to authenticate |
 
 ### Return type
 

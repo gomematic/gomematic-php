@@ -1,6 +1,6 @@
 <?php
 /**
- * InlineObject
+ * AuthLogin
  *
  * PHP version 5
  *
@@ -34,7 +34,7 @@ use \ArrayAccess;
 use \Gomematic\ObjectSerializer;
 
 /**
- * InlineObject Class Doc Comment
+ * AuthLogin Class Doc Comment
  *
  * @category Class
  * @package  Gomematic
@@ -42,7 +42,7 @@ use \Gomematic\ObjectSerializer;
  * @license  http://www.apache.org/licenses/LICENSE-2.0.html Apache-2.0
  * @link     https://github.com/gomematic/gomematic-php
  */
-class InlineObject implements ModelInterface, ArrayAccess
+class AuthLogin implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class InlineObject implements ModelInterface, ArrayAccess
       *
       * @var string
       */
-    protected static $openAPIModelName = 'inline_object';
+    protected static $openAPIModelName = 'auth_login';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -70,7 +70,7 @@ class InlineObject implements ModelInterface, ArrayAccess
       */
     protected static $openAPIFormats = [
         'username' => null,
-        'password' => null
+        'password' => 'password'
     ];
 
     /**
