@@ -200,9 +200,6 @@ class AuthToken implements ModelInterface, ArrayAccess
         if ($this->container['token'] === null) {
             $invalidProperties[] = "'token' can't be null";
         }
-        if ($this->container['expiresAt'] === null) {
-            $invalidProperties[] = "'expiresAt' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -245,7 +242,7 @@ class AuthToken implements ModelInterface, ArrayAccess
     /**
      * Gets expiresAt
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getExpiresAt()
     {
@@ -255,7 +252,7 @@ class AuthToken implements ModelInterface, ArrayAccess
     /**
      * Sets expiresAt
      *
-     * @param \DateTime $expiresAt expiresAt
+     * @param \DateTime|null $expiresAt expiresAt
      *
      * @return $this
      */

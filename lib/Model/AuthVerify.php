@@ -200,9 +200,6 @@ class AuthVerify implements ModelInterface, ArrayAccess
         if ($this->container['username'] === null) {
             $invalidProperties[] = "'username' can't be null";
         }
-        if ($this->container['createdAt'] === null) {
-            $invalidProperties[] = "'createdAt' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -245,7 +242,7 @@ class AuthVerify implements ModelInterface, ArrayAccess
     /**
      * Gets createdAt
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getCreatedAt()
     {
@@ -255,7 +252,7 @@ class AuthVerify implements ModelInterface, ArrayAccess
     /**
      * Sets createdAt
      *
-     * @param \DateTime $createdAt createdAt
+     * @param \DateTime|null $createdAt createdAt
      *
      * @return $this
      */

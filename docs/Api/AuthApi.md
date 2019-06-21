@@ -6,7 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**loginUser**](AuthApi.md#loginUser) | **POST** /auth/login | Authenticate an user by credentials
 [**refreshAuth**](AuthApi.md#refreshAuth) | **GET** /auth/refresh | Refresh an auth token before it expires
-[**verifyAuth**](AuthApi.md#verifyAuth) | **GET** /auth/verify/{token} | Verify validity for an authentication token
+[**verifyAuth**](AuthApi.md#verifyAuth) | **GET** /auth/verify | Verify validity for an authentication token
 
 
 
@@ -23,10 +23,22 @@ Authenticate an user by credentials
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure HTTP basic authorization: Basic
+$config = Gomematic\Configuration::getDefaultConfiguration()
+              ->setUsername('YOUR_USERNAME')
+              ->setPassword('YOUR_PASSWORD');
+
+// Configure API key authorization: Header
+$config = Gomematic\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Gomematic\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+
 $apiInstance = new Gomematic\Api\AuthApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client()
+    new GuzzleHttp\Client(),
+    $config
 );
 $authLogin = new \Gomematic\Model\AuthLogin(); // \Gomematic\Model\AuthLogin | The credentials to authenticate
 
@@ -52,7 +64,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[Basic](../../README.md#Basic), [Header](../../README.md#Header)
 
 ### HTTP request headers
 
@@ -77,10 +89,22 @@ Refresh an auth token before it expires
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure HTTP basic authorization: Basic
+$config = Gomematic\Configuration::getDefaultConfiguration()
+              ->setUsername('YOUR_USERNAME')
+              ->setPassword('YOUR_PASSWORD');
+
+// Configure API key authorization: Header
+$config = Gomematic\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Gomematic\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+
 $apiInstance = new Gomematic\Api\AuthApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client()
+    new GuzzleHttp\Client(),
+    $config
 );
 
 try {
@@ -102,7 +126,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[Basic](../../README.md#Basic), [Header](../../README.md#Header)
 
 ### HTTP request headers
 
@@ -116,7 +140,7 @@ No authorization required
 
 ## verifyAuth
 
-> \Gomematic\Model\AuthVerify verifyAuth($token)
+> \Gomematic\Model\AuthVerify verifyAuth()
 
 Verify validity for an authentication token
 
@@ -127,15 +151,26 @@ Verify validity for an authentication token
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure HTTP basic authorization: Basic
+$config = Gomematic\Configuration::getDefaultConfiguration()
+              ->setUsername('YOUR_USERNAME')
+              ->setPassword('YOUR_PASSWORD');
+
+// Configure API key authorization: Header
+$config = Gomematic\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Gomematic\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+
 $apiInstance = new Gomematic\Api\AuthApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client()
+    new GuzzleHttp\Client(),
+    $config
 );
-$token = 'token_example'; // string | A token that have to be checked
 
 try {
-    $result = $apiInstance->verifyAuth($token);
+    $result = $apiInstance->verifyAuth();
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling AuthApi->verifyAuth: ', $e->getMessage(), PHP_EOL;
@@ -145,10 +180,7 @@ try {
 
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **token** | **string**| A token that have to be checked |
+This endpoint does not need any parameter.
 
 ### Return type
 
@@ -156,7 +188,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[Basic](../../README.md#Basic), [Header](../../README.md#Header)
 
 ### HTTP request headers
 

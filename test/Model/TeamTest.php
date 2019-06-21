@@ -114,4 +114,11 @@ class TeamTest extends TestCase
     public function testPropertyUpdatedAt()
     {
     }
+
+    /**
+     * Test attribute "users"
+     */
+    public function testPropertyUsers()
+    {
+    }
 }

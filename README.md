@@ -64,8 +64,20 @@ Please follow the [installation](#installation) instructions and then run the fo
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure HTTP basic authorization: Basic
+$config = Gomematic\Configuration::getDefaultConfiguration()
+              ->setUsername('YOUR_USERNAME')
+              ->setPassword('YOUR_PASSWORD');
+
+// Configure API key authorization: Header
+$config = Gomematic\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Gomematic\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+
 $api = new Gomematic\Api\AuthApi(
-    new GuzzleHttp\Client()
+    new GuzzleHttp\Client(),
+    $config
 );
 
 $authLogin = new \Gomematic\Model\AuthLogin(); // \Gomematic\Model\AuthLogin | The credentials to authenticate
@@ -87,10 +99,10 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AuthApi* | [**loginUser**](docs/Api/AuthApi.md#loginuser) | **POST** /auth/login | Authenticate an user by credentials
 *AuthApi* | [**refreshAuth**](docs/Api/AuthApi.md#refreshauth) | **GET** /auth/refresh | Refresh an auth token before it expires
-*AuthApi* | [**verifyAuth**](docs/Api/AuthApi.md#verifyauth) | **GET** /auth/verify/{token} | Verify validity for an authentication token
-*ProfileApi* | [**showProfile**](docs/Api/ProfileApi.md#showprofile) | **GET** /profile/self | Retrieve an unlimited auth token
+*AuthApi* | [**verifyAuth**](docs/Api/AuthApi.md#verifyauth) | **GET** /auth/verify | Verify validity for an authentication token
+*ProfileApi* | [**showProfile**](docs/Api/ProfileApi.md#showprofile) | **GET** /profile/self | Fetch profile details of the personal account
 *ProfileApi* | [**tokenProfile**](docs/Api/ProfileApi.md#tokenprofile) | **GET** /profile/token | Retrieve an unlimited auth token
-*ProfileApi* | [**updateProfile**](docs/Api/ProfileApi.md#updateprofile) | **PUT** /profile/self | Retrieve an unlimited auth token
+*ProfileApi* | [**updateProfile**](docs/Api/ProfileApi.md#updateprofile) | **PUT** /profile/self | Update your own profile information
 *TeamApi* | [**appendTeamToUser**](docs/Api/TeamApi.md#appendteamtouser) | **POST** /teams/{team_id}/users | Assign a user to team
 *TeamApi* | [**createTeam**](docs/Api/TeamApi.md#createteam) | **POST** /teams | Create a new team
 *TeamApi* | [**deleteTeam**](docs/Api/TeamApi.md#deleteteam) | **DELETE** /teams/{team_id} | Delete a specific team
@@ -131,14 +143,14 @@ Class | Method | HTTP request | Description
 
 
 
-## BasicAuth
+## Basic
 
 
 - **Type**: HTTP basic authentication
 
 
 
-## HeaderAuth
+## Header
 
 
 - **Type**: API key

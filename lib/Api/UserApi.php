@@ -127,7 +127,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError
+     * @return \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError
      */
     public function appendUserToTeam($userId, $userTeam)
     {
@@ -145,7 +145,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
      */
     public function appendUserToTeamWithHttpInfo($userId, $userTeam)
     {
@@ -205,6 +205,18 @@ class UserApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 404:
+                    if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\Gomematic\Model\GeneralError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 case 412:
                     if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
@@ -218,14 +230,14 @@ class UserApi
                         $response->getHeaders()
                     ];
                 case 422:
-                    if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
+                    if ('\Gomematic\Model\ValidationError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
                     } else {
                         $content = $responseBody->getContents();
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\Gomematic\Model\GeneralError', []),
+                        ObjectSerializer::deserialize($content, '\Gomematic\Model\ValidationError', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -275,6 +287,14 @@ class UserApi
                     );
                     $e->setResponseObject($data);
                     break;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Gomematic\Model\GeneralError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
                 case 412:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -286,7 +306,7 @@ class UserApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Gomematic\Model\GeneralError',
+                        '\Gomematic\Model\ValidationError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -462,6 +482,15 @@ class UserApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -492,7 +521,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Gomematic\Model\User|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError
+     * @return \Gomematic\Model\User|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError
      */
     public function createUser($user)
     {
@@ -509,7 +538,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Gomematic\Model\User|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Gomematic\Model\User|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
      */
     public function createUserWithHttpInfo($user)
     {
@@ -558,18 +587,6 @@ class UserApi
                         $response->getHeaders()
                     ];
                 case 403:
-                    if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = $responseBody->getContents();
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\Gomematic\Model\GeneralError', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                case 412:
                     if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
                     } else {
@@ -632,14 +649,6 @@ class UserApi
                     $e->setResponseObject($data);
                     break;
                 case 403:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Gomematic\Model\GeneralError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
-                case 412:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Gomematic\Model\GeneralError',
@@ -809,6 +818,15 @@ class UserApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -839,7 +857,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError
+     * @return \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError
      */
     public function deleteUser($userId)
     {
@@ -856,7 +874,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
      */
     public function deleteUserWithHttpInfo($userId)
     {
@@ -928,6 +946,18 @@ class UserApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 404:
+                    if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\Gomematic\Model\GeneralError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 default:
                     if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
@@ -975,6 +1005,14 @@ class UserApi
                     $e->setResponseObject($data);
                     break;
                 case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Gomematic\Model\GeneralError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Gomematic\Model\GeneralError',
@@ -1141,6 +1179,15 @@ class UserApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -1250,7 +1297,7 @@ class UserApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
-                case 412:
+                case 404:
                     if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
                     } else {
@@ -1262,7 +1309,7 @@ class UserApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
-                case 422:
+                case 412:
                     if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
                     } else {
@@ -1320,7 +1367,7 @@ class UserApi
                     );
                     $e->setResponseObject($data);
                     break;
-                case 412:
+                case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Gomematic\Model\GeneralError',
@@ -1328,7 +1375,7 @@ class UserApi
                     );
                     $e->setResponseObject($data);
                     break;
-                case 422:
+                case 412:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Gomematic\Model\GeneralError',
@@ -1507,6 +1554,15 @@ class UserApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -1537,7 +1593,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Gomematic\Model\TeamUser[]|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError
+     * @return \Gomematic\Model\TeamUser[]|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError
      */
     public function listUserTeams($userId)
     {
@@ -1554,7 +1610,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Gomematic\Model\TeamUser[]|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Gomematic\Model\TeamUser[]|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
      */
     public function listUserTeamsWithHttpInfo($userId)
     {
@@ -1614,6 +1670,18 @@ class UserApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 404:
+                    if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\Gomematic\Model\GeneralError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 default:
                     if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
@@ -1653,6 +1721,14 @@ class UserApi
                     $e->setResponseObject($data);
                     break;
                 case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Gomematic\Model\GeneralError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Gomematic\Model\GeneralError',
@@ -1819,6 +1895,15 @@ class UserApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -2112,6 +2197,15 @@ class UserApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -2143,7 +2237,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError
+     * @return \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError
      */
     public function permitUserTeam($userId, $userTeam)
     {
@@ -2161,7 +2255,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
      */
     public function permitUserTeamWithHttpInfo($userId, $userTeam)
     {
@@ -2221,6 +2315,18 @@ class UserApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 404:
+                    if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\Gomematic\Model\GeneralError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 case 412:
                     if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
@@ -2234,14 +2340,14 @@ class UserApi
                         $response->getHeaders()
                     ];
                 case 422:
-                    if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
+                    if ('\Gomematic\Model\ValidationError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
                     } else {
                         $content = $responseBody->getContents();
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '\Gomematic\Model\GeneralError', []),
+                        ObjectSerializer::deserialize($content, '\Gomematic\Model\ValidationError', []),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
@@ -2291,6 +2397,14 @@ class UserApi
                     );
                     $e->setResponseObject($data);
                     break;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Gomematic\Model\GeneralError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
                 case 412:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -2302,7 +2416,7 @@ class UserApi
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Gomematic\Model\GeneralError',
+                        '\Gomematic\Model\ValidationError',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2478,6 +2592,15 @@ class UserApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -2508,7 +2631,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Gomematic\Model\User|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError
+     * @return \Gomematic\Model\User|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError
      */
     public function showUser($userId)
     {
@@ -2525,7 +2648,7 @@ class UserApi
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Gomematic\Model\User|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Gomematic\Model\User|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
      */
     public function showUserWithHttpInfo($userId)
     {
@@ -2585,6 +2708,18 @@ class UserApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
+                case 404:
+                    if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
+                        $content = $responseBody; //stream goes to serializer
+                    } else {
+                        $content = $responseBody->getContents();
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\Gomematic\Model\GeneralError', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 default:
                     if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
@@ -2624,6 +2759,14 @@ class UserApi
                     $e->setResponseObject($data);
                     break;
                 case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Gomematic\Model\GeneralError',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Gomematic\Model\GeneralError',
@@ -2790,6 +2933,15 @@ class UserApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -2899,7 +3051,7 @@ class UserApi
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
-                case 412:
+                case 404:
                     if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
                     } else {
@@ -2969,7 +3121,7 @@ class UserApi
                     );
                     $e->setResponseObject($data);
                     break;
-                case 412:
+                case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Gomematic\Model\GeneralError',
@@ -3156,6 +3308,15 @@ class UserApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {

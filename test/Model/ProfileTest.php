@@ -142,4 +142,11 @@ class ProfileTest extends TestCase
     public function testPropertyUpdatedAt()
     {
     }
+
+    /**
+     * Test attribute "teams"
+     */
+    public function testPropertyTeams()
+    {
+    }
 }

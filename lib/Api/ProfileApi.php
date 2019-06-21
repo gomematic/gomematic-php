@@ -120,7 +120,7 @@ class ProfileApi
     /**
      * Operation showProfile
      *
-     * Retrieve an unlimited auth token
+     * Fetch profile details of the personal account
      *
      *
      * @throws \Gomematic\ApiException on non-2xx response
@@ -136,7 +136,7 @@ class ProfileApi
     /**
      * Operation showProfileWithHttpInfo
      *
-     * Retrieve an unlimited auth token
+     * Fetch profile details of the personal account
      *
      *
      * @throws \Gomematic\ApiException on non-2xx response
@@ -263,7 +263,7 @@ class ProfileApi
     /**
      * Operation showProfileAsync
      *
-     * Retrieve an unlimited auth token
+     * Fetch profile details of the personal account
      *
      *
      * @throws \InvalidArgumentException
@@ -282,7 +282,7 @@ class ProfileApi
     /**
      * Operation showProfileAsyncWithHttpInfo
      *
-     * Retrieve an unlimited auth token
+     * Fetch profile details of the personal account
      *
      *
      * @throws \InvalidArgumentException
@@ -389,6 +389,15 @@ class ProfileApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -702,6 +711,15 @@ class ProfileApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -726,13 +744,13 @@ class ProfileApi
     /**
      * Operation updateProfile
      *
-     * Retrieve an unlimited auth token
+     * Update your own profile information
      *
      * @param  \Gomematic\Model\Profile $profile The profile data to update (required)
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return \Gomematic\Model\Profile|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError
+     * @return \Gomematic\Model\Profile|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError
      */
     public function updateProfile($profile)
     {
@@ -743,13 +761,13 @@ class ProfileApi
     /**
      * Operation updateProfileWithHttpInfo
      *
-     * Retrieve an unlimited auth token
+     * Update your own profile information
      *
      * @param  \Gomematic\Model\Profile $profile The profile data to update (required)
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
-     * @return array of \Gomematic\Model\Profile|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Gomematic\Model\Profile|\Gomematic\Model\GeneralError|\Gomematic\Model\ValidationError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
      */
     public function updateProfileWithHttpInfo($profile)
     {
@@ -798,18 +816,6 @@ class ProfileApi
                         $response->getHeaders()
                     ];
                 case 403:
-                    if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
-                        $content = $responseBody; //stream goes to serializer
-                    } else {
-                        $content = $responseBody->getContents();
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, '\Gomematic\Model\GeneralError', []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                case 412:
                     if ('\Gomematic\Model\GeneralError' === '\SplFileObject') {
                         $content = $responseBody; //stream goes to serializer
                     } else {
@@ -879,14 +885,6 @@ class ProfileApi
                     );
                     $e->setResponseObject($data);
                     break;
-                case 412:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Gomematic\Model\GeneralError',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    break;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -911,7 +909,7 @@ class ProfileApi
     /**
      * Operation updateProfileAsync
      *
-     * Retrieve an unlimited auth token
+     * Update your own profile information
      *
      * @param  \Gomematic\Model\Profile $profile The profile data to update (required)
      *
@@ -931,7 +929,7 @@ class ProfileApi
     /**
      * Operation updateProfileAsyncWithHttpInfo
      *
-     * Retrieve an unlimited auth token
+     * Update your own profile information
      *
      * @param  \Gomematic\Model\Profile $profile The profile data to update (required)
      *
@@ -1049,6 +1047,15 @@ class ProfileApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {

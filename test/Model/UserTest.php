@@ -142,4 +142,11 @@ class UserTest extends TestCase
     public function testPropertyUpdatedAt()
     {
     }
+
+    /**
+     * Test attribute "teams"
+     */
+    public function testPropertyTeams()
+    {
+    }
 }

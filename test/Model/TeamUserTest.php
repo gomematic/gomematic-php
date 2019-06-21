@@ -88,6 +88,13 @@ class TeamUserTest extends TestCase
     }
 
     /**
+     * Test attribute "team"
+     */
+    public function testPropertyTeam()
+    {
+    }
+
+    /**
      * Test attribute "userId"
      */
     public function testPropertyUserId()
@@ -95,9 +102,30 @@ class TeamUserTest extends TestCase
     }
 
     /**
+     * Test attribute "user"
+     */
+    public function testPropertyUser()
+    {
+    }
+
+    /**
      * Test attribute "perm"
      */
     public function testPropertyPerm()
+    {
+    }
+
+    /**
+     * Test attribute "createdAt"
+     */
+    public function testPropertyCreatedAt()
+    {
+    }
+
+    /**
+     * Test attribute "updatedAt"
+     */
+    public function testPropertyUpdatedAt()
     {
     }
 }

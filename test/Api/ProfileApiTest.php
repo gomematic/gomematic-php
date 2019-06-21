@@ -77,7 +77,7 @@ class ProfileApiTest extends TestCase
     /**
      * Test case for showProfile
      *
-     * Retrieve an unlimited auth token.
+     * Fetch profile details of the personal account.
      *
      */
     public function testShowProfile()
@@ -97,7 +97,7 @@ class ProfileApiTest extends TestCase
     /**
      * Test case for updateProfile
      *
-     * Retrieve an unlimited auth token.
+     * Update your own profile information.
      *
      */
     public function testUpdateProfile()

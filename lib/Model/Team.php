@@ -63,7 +63,8 @@ class Team implements ModelInterface, ArrayAccess
         'slug' => 'string',
         'name' => 'string',
         'createdAt' => '\DateTime',
-        'updatedAt' => '\DateTime'
+        'updatedAt' => '\DateTime',
+        'users' => '\Gomematic\Model\TeamUser[]'
     ];
 
     /**
@@ -76,7 +77,8 @@ class Team implements ModelInterface, ArrayAccess
         'slug' => null,
         'name' => null,
         'createdAt' => 'date-time',
-        'updatedAt' => 'date-time'
+        'updatedAt' => 'date-time',
+        'users' => null
     ];
 
     /**
@@ -110,7 +112,8 @@ class Team implements ModelInterface, ArrayAccess
         'slug' => 'slug',
         'name' => 'name',
         'createdAt' => 'created_at',
-        'updatedAt' => 'updated_at'
+        'updatedAt' => 'updated_at',
+        'users' => 'users'
     ];
 
     /**
@@ -123,7 +126,8 @@ class Team implements ModelInterface, ArrayAccess
         'slug' => 'setSlug',
         'name' => 'setName',
         'createdAt' => 'setCreatedAt',
-        'updatedAt' => 'setUpdatedAt'
+        'updatedAt' => 'setUpdatedAt',
+        'users' => 'setUsers'
     ];
 
     /**
@@ -136,7 +140,8 @@ class Team implements ModelInterface, ArrayAccess
         'slug' => 'getSlug',
         'name' => 'getName',
         'createdAt' => 'getCreatedAt',
-        'updatedAt' => 'getUpdatedAt'
+        'updatedAt' => 'getUpdatedAt',
+        'users' => 'getUsers'
     ];
 
     /**
@@ -204,6 +209,7 @@ class Team implements ModelInterface, ArrayAccess
         $this->container['name'] = isset($data['name']) ? $data['name'] : null;
         $this->container['createdAt'] = isset($data['createdAt']) ? $data['createdAt'] : null;
         $this->container['updatedAt'] = isset($data['updatedAt']) ? $data['updatedAt'] : null;
+        $this->container['users'] = isset($data['users']) ? $data['users'] : null;
     }
 
     /**
@@ -215,9 +221,6 @@ class Team implements ModelInterface, ArrayAccess
     {
         $invalidProperties = [];
 
-        if ($this->container['name'] === null) {
-            $invalidProperties[] = "'name' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -284,7 +287,7 @@ class Team implements ModelInterface, ArrayAccess
     /**
      * Gets name
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -294,7 +297,7 @@ class Team implements ModelInterface, ArrayAccess
     /**
      * Sets name
      *
-     * @param string $name name
+     * @param string|null $name name
      *
      * @return $this
      */
@@ -349,6 +352,30 @@ class Team implements ModelInterface, ArrayAccess
     public function setUpdatedAt($updatedAt)
     {
         $this->container['updatedAt'] = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Gets users
+     *
+     * @return \Gomematic\Model\TeamUser[]|null
+     */
+    public function getUsers()
+    {
+        return $this->container['users'];
+    }
+
+    /**
+     * Sets users
+     *
+     * @param \Gomematic\Model\TeamUser[]|null $users users
+     *
+     * @return $this
+     */
+    public function setUsers($users)
+    {
+        $this->container['users'] = $users;
 
         return $this;
     }

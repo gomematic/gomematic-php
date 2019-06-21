@@ -60,8 +60,12 @@ class TeamUser implements ModelInterface, ArrayAccess
       */
     protected static $openAPITypes = [
         'teamId' => 'string',
+        'team' => '\Gomematic\Model\Team',
         'userId' => 'string',
-        'perm' => 'string'
+        'user' => '\Gomematic\Model\User',
+        'perm' => 'string',
+        'createdAt' => '\DateTime',
+        'updatedAt' => '\DateTime'
     ];
 
     /**
@@ -71,8 +75,12 @@ class TeamUser implements ModelInterface, ArrayAccess
       */
     protected static $openAPIFormats = [
         'teamId' => 'uuid',
+        'team' => null,
         'userId' => 'uuid',
-        'perm' => null
+        'user' => null,
+        'perm' => null,
+        'createdAt' => 'date-time',
+        'updatedAt' => 'date-time'
     ];
 
     /**
@@ -103,8 +111,12 @@ class TeamUser implements ModelInterface, ArrayAccess
      */
     protected static $attributeMap = [
         'teamId' => 'team_id',
+        'team' => 'team',
         'userId' => 'user_id',
-        'perm' => 'perm'
+        'user' => 'user',
+        'perm' => 'perm',
+        'createdAt' => 'created_at',
+        'updatedAt' => 'updated_at'
     ];
 
     /**
@@ -114,8 +126,12 @@ class TeamUser implements ModelInterface, ArrayAccess
      */
     protected static $setters = [
         'teamId' => 'setTeamId',
+        'team' => 'setTeam',
         'userId' => 'setUserId',
-        'perm' => 'setPerm'
+        'user' => 'setUser',
+        'perm' => 'setPerm',
+        'createdAt' => 'setCreatedAt',
+        'updatedAt' => 'setUpdatedAt'
     ];
 
     /**
@@ -125,8 +141,12 @@ class TeamUser implements ModelInterface, ArrayAccess
      */
     protected static $getters = [
         'teamId' => 'getTeamId',
+        'team' => 'getTeam',
         'userId' => 'getUserId',
-        'perm' => 'getPerm'
+        'user' => 'getUser',
+        'perm' => 'getPerm',
+        'createdAt' => 'getCreatedAt',
+        'updatedAt' => 'getUpdatedAt'
     ];
 
     /**
@@ -207,8 +227,12 @@ class TeamUser implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['teamId'] = isset($data['teamId']) ? $data['teamId'] : null;
+        $this->container['team'] = isset($data['team']) ? $data['team'] : null;
         $this->container['userId'] = isset($data['userId']) ? $data['userId'] : null;
+        $this->container['user'] = isset($data['user']) ? $data['user'] : null;
         $this->container['perm'] = isset($data['perm']) ? $data['perm'] : null;
+        $this->container['createdAt'] = isset($data['createdAt']) ? $data['createdAt'] : null;
+        $this->container['updatedAt'] = isset($data['updatedAt']) ? $data['updatedAt'] : null;
     }
 
     /**
@@ -277,6 +301,30 @@ class TeamUser implements ModelInterface, ArrayAccess
     }
 
     /**
+     * Gets team
+     *
+     * @return \Gomematic\Model\Team|null
+     */
+    public function getTeam()
+    {
+        return $this->container['team'];
+    }
+
+    /**
+     * Sets team
+     *
+     * @param \Gomematic\Model\Team|null $team team
+     *
+     * @return $this
+     */
+    public function setTeam($team)
+    {
+        $this->container['team'] = $team;
+
+        return $this;
+    }
+
+    /**
      * Gets userId
      *
      * @return string
@@ -296,6 +344,30 @@ class TeamUser implements ModelInterface, ArrayAccess
     public function setUserId($userId)
     {
         $this->container['userId'] = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Gets user
+     *
+     * @return \Gomematic\Model\User|null
+     */
+    public function getUser()
+    {
+        return $this->container['user'];
+    }
+
+    /**
+     * Sets user
+     *
+     * @param \Gomematic\Model\User|null $user user
+     *
+     * @return $this
+     */
+    public function setUser($user)
+    {
+        $this->container['user'] = $user;
 
         return $this;
     }
@@ -329,6 +401,54 @@ class TeamUser implements ModelInterface, ArrayAccess
             );
         }
         $this->container['perm'] = $perm;
+
+        return $this;
+    }
+
+    /**
+     * Gets createdAt
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt()
+    {
+        return $this->container['createdAt'];
+    }
+
+    /**
+     * Sets createdAt
+     *
+     * @param \DateTime|null $createdAt createdAt
+     *
+     * @return $this
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->container['createdAt'] = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Gets updatedAt
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->container['updatedAt'];
+    }
+
+    /**
+     * Sets updatedAt
+     *
+     * @param \DateTime|null $updatedAt updatedAt
+     *
+     * @return $this
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->container['updatedAt'] = $updatedAt;
 
         return $this;
     }

@@ -4,9 +4,9 @@ All URIs are relative to *http://try.gomematic.tech/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**showProfile**](ProfileApi.md#showProfile) | **GET** /profile/self | Retrieve an unlimited auth token
+[**showProfile**](ProfileApi.md#showProfile) | **GET** /profile/self | Fetch profile details of the personal account
 [**tokenProfile**](ProfileApi.md#tokenProfile) | **GET** /profile/token | Retrieve an unlimited auth token
-[**updateProfile**](ProfileApi.md#updateProfile) | **PUT** /profile/self | Retrieve an unlimited auth token
+[**updateProfile**](ProfileApi.md#updateProfile) | **PUT** /profile/self | Update your own profile information
 
 
 
@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 > \Gomematic\Model\Profile showProfile()
 
-Retrieve an unlimited auth token
+Fetch profile details of the personal account
 
 ### Example
 
@@ -23,10 +23,22 @@ Retrieve an unlimited auth token
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure HTTP basic authorization: Basic
+$config = Gomematic\Configuration::getDefaultConfiguration()
+              ->setUsername('YOUR_USERNAME')
+              ->setPassword('YOUR_PASSWORD');
+
+// Configure API key authorization: Header
+$config = Gomematic\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Gomematic\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+
 $apiInstance = new Gomematic\Api\ProfileApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client()
+    new GuzzleHttp\Client(),
+    $config
 );
 
 try {
@@ -48,7 +60,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[Basic](../../README.md#Basic), [Header](../../README.md#Header)
 
 ### HTTP request headers
 
@@ -73,10 +85,22 @@ Retrieve an unlimited auth token
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure HTTP basic authorization: Basic
+$config = Gomematic\Configuration::getDefaultConfiguration()
+              ->setUsername('YOUR_USERNAME')
+              ->setPassword('YOUR_PASSWORD');
+
+// Configure API key authorization: Header
+$config = Gomematic\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Gomematic\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+
 $apiInstance = new Gomematic\Api\ProfileApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client()
+    new GuzzleHttp\Client(),
+    $config
 );
 
 try {
@@ -98,7 +122,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[Basic](../../README.md#Basic), [Header](../../README.md#Header)
 
 ### HTTP request headers
 
@@ -114,7 +138,7 @@ No authorization required
 
 > \Gomematic\Model\Profile updateProfile($profile)
 
-Retrieve an unlimited auth token
+Update your own profile information
 
 ### Example
 
@@ -123,10 +147,22 @@ Retrieve an unlimited auth token
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure HTTP basic authorization: Basic
+$config = Gomematic\Configuration::getDefaultConfiguration()
+              ->setUsername('YOUR_USERNAME')
+              ->setPassword('YOUR_PASSWORD');
+
+// Configure API key authorization: Header
+$config = Gomematic\Configuration::getDefaultConfiguration()->setApiKey('X-API-Key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Gomematic\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-API-Key', 'Bearer');
+
+
 $apiInstance = new Gomematic\Api\ProfileApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client()
+    new GuzzleHttp\Client(),
+    $config
 );
 $profile = new \Gomematic\Model\Profile(); // \Gomematic\Model\Profile | The profile data to update
 
@@ -152,7 +188,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[Basic](../../README.md#Basic), [Header](../../README.md#Header)
 
 ### HTTP request headers
 

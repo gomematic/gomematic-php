@@ -403,6 +403,15 @@ class AuthApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -696,6 +705,15 @@ class AuthApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
@@ -722,15 +740,14 @@ class AuthApi
      *
      * Verify validity for an authentication token
      *
-     * @param  string $token A token that have to be checked (required)
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return \Gomematic\Model\AuthVerify|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError
      */
-    public function verifyAuth($token)
+    public function verifyAuth()
     {
-        list($response) = $this->verifyAuthWithHttpInfo($token);
+        list($response) = $this->verifyAuthWithHttpInfo();
         return $response;
     }
 
@@ -739,15 +756,14 @@ class AuthApi
      *
      * Verify validity for an authentication token
      *
-     * @param  string $token A token that have to be checked (required)
      *
      * @throws \Gomematic\ApiException on non-2xx response
      * @throws \InvalidArgumentException
      * @return array of \Gomematic\Model\AuthVerify|\Gomematic\Model\GeneralError|\Gomematic\Model\GeneralError, HTTP status code, HTTP response headers (array of strings)
      */
-    public function verifyAuthWithHttpInfo($token)
+    public function verifyAuthWithHttpInfo()
     {
-        $request = $this->verifyAuthRequest($token);
+        $request = $this->verifyAuthRequest();
 
         try {
             $options = $this->createHttpClientOption();
@@ -867,14 +883,13 @@ class AuthApi
      *
      * Verify validity for an authentication token
      *
-     * @param  string $token A token that have to be checked (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function verifyAuthAsync($token)
+    public function verifyAuthAsync()
     {
-        return $this->verifyAuthAsyncWithHttpInfo($token)
+        return $this->verifyAuthAsyncWithHttpInfo()
             ->then(
                 function ($response) {
                     return $response[0];
@@ -887,15 +902,14 @@ class AuthApi
      *
      * Verify validity for an authentication token
      *
-     * @param  string $token A token that have to be checked (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function verifyAuthAsyncWithHttpInfo($token)
+    public function verifyAuthAsyncWithHttpInfo()
     {
         $returnType = '\Gomematic\Model\AuthVerify';
-        $request = $this->verifyAuthRequest($token);
+        $request = $this->verifyAuthRequest();
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -934,21 +948,14 @@ class AuthApi
     /**
      * Create request for operation 'verifyAuth'
      *
-     * @param  string $token A token that have to be checked (required)
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    protected function verifyAuthRequest($token)
+    protected function verifyAuthRequest()
     {
-        // verify the required parameter 'token' is set
-        if ($token === null || (is_array($token) && count($token) === 0)) {
-            throw new \InvalidArgumentException(
-                'Missing the required parameter $token when calling verifyAuth'
-            );
-        }
 
-        $resourcePath = '/auth/verify/{token}';
+        $resourcePath = '/auth/verify';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -956,14 +963,6 @@ class AuthApi
         $multipart = false;
 
 
-        // path params
-        if ($token !== null) {
-            $resourcePath = str_replace(
-                '{' . 'token' . '}',
-                ObjectSerializer::toPathValue($token),
-                $resourcePath
-            );
-        }
 
         // body params
         $_tempBody = null;
@@ -1008,6 +1007,15 @@ class AuthApi
             }
         }
 
+        // this endpoint requires HTTP basic authentication
+        if (!empty($this->config->getUsername()) || !(empty($this->config->getPassword()))) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($this->config->getUsername() . ":" . $this->config->getPassword());
+        }
+        // this endpoint requires API key authentication
+        $apiKey = $this->config->getApiKeyWithPrefix('X-API-Key');
+        if ($apiKey !== null) {
+            $headers['X-API-Key'] = $apiKey;
+        }
 
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
